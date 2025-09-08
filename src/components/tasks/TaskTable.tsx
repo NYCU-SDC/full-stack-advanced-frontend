@@ -23,7 +23,7 @@ export function TaskTable({
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="hidden sm:block">
         <CardTitle className="text-2xl">Tasks</CardTitle>
       </CardHeader>
       <CardContent>
@@ -39,8 +39,6 @@ export function TaskTable({
         </Table>
         <form
           className="text-sm"
-          onClick={() => setIsAddingTask(true)}
-          onBlur={() => setIsAddingTask(false)}
           onSubmit={(e) => {
             e.preventDefault();
             if (newTaskTitle !== "") {
@@ -53,12 +51,16 @@ export function TaskTable({
           {isAddingTask ? (
             <Input
               autoFocus
+              onBlur={() => setIsAddingTask(false)}
               value={newTaskTitle}
               onInput={(e) => setNewTaskTitle(e.currentTarget.value)}
               placeholder="What needs to be done?"
             />
           ) : (
-            <div className="flex p-1 gap-2 items-center hover:bg-muted/50">
+            <div
+              onClick={() => setIsAddingTask(true)}
+              className="flex p-1 gap-2 items-center hover:bg-muted/50"
+            >
               <Plus />
               <p>Create</p>
             </div>
