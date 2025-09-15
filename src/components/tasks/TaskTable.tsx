@@ -12,7 +12,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import DetailCard from "@/components/tasks/DetailCard.tsx";
 
-export function TaskTable({
+export default function TaskTable({
   tasks,
   addTask,
 }: {
