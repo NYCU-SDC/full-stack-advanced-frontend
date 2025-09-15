@@ -11,7 +11,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 
-export function TaskTable({
+export default function TaskTable({
   tasks,
   addTask,
 }: {

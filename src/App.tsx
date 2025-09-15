@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { TaskTable } from "@/components/tasks/TaskTable.tsx";
+import TaskTable from "@/components/tasks/TaskTable.tsx";
 import { tasks } from "@/mocks/tasks.ts";
 import { useState } from "react";
 
