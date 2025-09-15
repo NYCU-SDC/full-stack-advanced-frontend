@@ -18,7 +18,13 @@ export function TableHeadRow() {
   );
 }
 
-export function TableBodyRow({ task }: { task: Task }) {
+export function TableBodyRow({
+  task,
+  onClick,
+}: {
+  task: Task;
+  onClick?: () => void;
+}) {
   const [dueInDays, setDueInDays] = useState<number | null>(null);
 
   useEffect(() => {
@@ -32,7 +38,7 @@ export function TableBodyRow({ task }: { task: Task }) {
   }, [task.dueDate]);
 
   return (
-    <TableRow>
+    <TableRow onClick={onClick}>
       <TableCell className="hidden sm:table-cell">{task.id}</TableCell>
       <TableCell className="hidden sm:table-cell">
         <div className="space-x-1">
