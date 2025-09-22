@@ -14,8 +14,10 @@ function App() {
     <main>
       <Header />
       <openTaskDetailContext.Provider value={{ openedTaskId, setOpenedTaskId }}>
-        <div className="flex justify-center">
-          <div className="w-full max-w-4xl justify-self-center">
+        <div className="flex justify-center gap-4">
+          <div
+            className={`sm:max-w-4xl justify-self-center max-w-full transition-all duration-500 ${openedTaskId ? "" : ""}`}
+          >
             <TaskTable
               tasks={currentTasks}
               addTask={(title: string) =>
@@ -34,12 +36,16 @@ function App() {
               }
             />
           </div>
-          {openedTaskId && (
-            <DetailCard
-              setOpenedTaskId={setOpenedTaskId}
-              task={tasks.find((task) => task.id == openedTaskId) as Task}
-            />
-          )}
+          <div
+            className={`${openedTaskId ? "w-md" : "w-0"} transition-all duration-500 `}
+          >
+            {openedTaskId && (
+              <DetailCard
+                setOpenedTaskId={setOpenedTaskId}
+                task={tasks.find((task) => task.id == openedTaskId) as Task}
+              />
+            )}
+          </div>
         </div>
       </openTaskDetailContext.Provider>
     </main>
