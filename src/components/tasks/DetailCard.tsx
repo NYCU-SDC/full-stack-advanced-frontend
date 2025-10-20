@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { X, CalendarClock } from "lucide-react";
 import { UserCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import ReactMarkdown from "react-markdown";
 import type { Task } from "@/types/task.types.ts";
 import Status from "@/components/tasks/Status.tsx";
 import Label from "@/components/tasks/Label.tsx";
@@ -95,7 +96,9 @@ export default function DetailCard({
             <Button onClick={() => setIsEditingDescription(false)}>Save</Button>
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground">{editedDescription}</p>
+          <div className="prose">
+            <ReactMarkdown>{editedDescription}</ReactMarkdown>
+          </div>
         )}
         <p className="font-bold">Detail</p>
         <div className="flex">
