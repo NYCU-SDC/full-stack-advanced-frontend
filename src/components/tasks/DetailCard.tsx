@@ -18,7 +18,7 @@ export default function DetailCard({
   setOpenedTaskId: Dispatch<SetStateAction<number | undefined>>;
   task: Task;
 }) {
-  const usFormatter = new Intl.DateTimeFormat("en-US", {
+  const dateFormatter = new Intl.DateTimeFormat(navigator.language, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -46,7 +46,7 @@ export default function DetailCard({
         <CardTitle className="text-2xl">{task.title}</CardTitle>
         <div className="flex items-center gap-2 text-sm mb-3">
           <CalendarClock size={16} />
-          <p>{usFormatter.format(new Date(task.dueDate ?? ""))}</p>
+          <p>{dateFormatter.format(new Date(task.dueDate ?? ""))}</p>
         </div>
         <Status status={task.status} />
       </CardHeader>
