@@ -8,6 +8,12 @@ import {
 import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select.tsx";
 import { X, CalendarClock } from "lucide-react";
 import { UserCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import ReactMarkdown from "react-markdown";
@@ -26,6 +32,7 @@ export default function DetailCard({
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState(task.description);
+  const [jobStatus, setJobStatus] = useState<typeof task.status>(task.status);
 
   const dateFormatter = new Intl.DateTimeFormat(navigator.language, {
     month: "short",
@@ -75,7 +82,32 @@ export default function DetailCard({
           <CalendarClock size={16} />
           <p>{dateFormatter.format(new Date(task.dueDate ?? ""))}</p>
         </div>
-        <Status status={task.status} />
+        {/* <div> */}
+        <Select
+          value={jobStatus}
+          onValueChange={(val: string) =>
+            setJobStatus(val as typeof task.status)
+          }
+        >
+          <SelectTrigger>
+            <Status status={jobStatus} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="INBOX">
+              <Status status="INBOX" />
+            </SelectItem>
+            <SelectItem value="TO_DO">
+              <Status status="TO_DO" />
+            </SelectItem>
+            <SelectItem value="IN_PROGRESS">
+              <Status status="IN_PROGRESS" />
+            </SelectItem>
+            <SelectItem value="DONE">
+              <Status status="DONE" />
+            </SelectItem>
+          </SelectContent>
+        </Select>
+        {/* </div> */}
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
