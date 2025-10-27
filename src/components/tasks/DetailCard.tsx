@@ -1,4 +1,10 @@
-import { type Dispatch, type SetStateAction, useState } from "react";
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import {
   Card,
   CardTitle,
@@ -39,11 +45,58 @@ export default function DetailCard({
 }) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isSearchingAssignee, setIsSearchingAssignee] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(task.title);
+  const [title, setTitle] = useState(task.title);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [description, setDescription] = useState(task.description);
   const [editedDescription, setEditedDescription] = useState(task.description);
   const [jobStatus, setJobStatus] = useState<typeof task.status>(task.status);
   const [assignee, setAssignee] = useState<string | null>(task.assignee);
+
+  const getDescriptionFromLocalStorage = useCallback(() => {
+    return localStorage.getItem(`task-${task.id}-description`);
+  }, [task.id]);
+
+  const setDescriptionToLocalStorage = useCallback(
+    (desc: string) => {
+      localStorage.setItem(`task-${task.id}-description`, desc);
+    },
+    [task.id]
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const debounce = <T extends (...args: any[]) => void>(
+    fn: T,
+    delay = 500
+  ): ((...args: Parameters<T>) => void) => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    return (...args: Parameters<T>): void => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      timer = setTimeout(() => {
+        fn(...args);
+      }, delay);
+    };
+  };
+
+  // save editing description to local storage with debounce
+  const saveDescriptionDebounced = debounce((desc: string) => {
+    setDescriptionToLocalStorage(desc);
+  }, 500);
+
+  // load description from local storage when isEditingDescription changes
+  useEffect(() => {
+    if (isEditingDescription) {
+      const savedDescription = getDescriptionFromLocalStorage();
+      if (savedDescription !== null) {
+        setEditedDescription(savedDescription);
+      } else {
+        setEditedDescription(description);
+      }
+    }
+  }, [isEditingDescription, getDescriptionFromLocalStorage, description]);
 
   const dateFormatter = new Intl.DateTimeFormat(navigator.language, {
     month: "short",
@@ -73,15 +126,12 @@ export default function DetailCard({
 
         {isEditingTitle ? (
           <div className="space-y-2">
-            <Input
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-            />
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} />
             <Button onClick={() => setIsEditingTitle(false)}>Save</Button>
           </div>
         ) : (
           <div className="flex gap-2">
-            <CardTitle className="text-2xl">{editedTitle}</CardTitle>
+            <CardTitle className="text-2xl">{title}</CardTitle>
             <PencilSquareIcon
               className="size-6 flex-shrink-0"
               onClick={() => setIsEditingTitle(true)}
@@ -134,13 +184,23 @@ export default function DetailCard({
               autoResize={true}
               className="resize-none"
               value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
+              onChange={(e) => {
+                setEditedDescription(e.target.value);
+                saveDescriptionDebounced(e.target.value);
+              }}
             />
-            <Button onClick={() => setIsEditingDescription(false)}>Save</Button>
+            <Button
+              onClick={() => {
+                setDescription(editedDescription);
+                setIsEditingDescription(false);
+              }}
+            >
+              Save
+            </Button>
           </div>
         ) : (
           <div className="prose">
-            <ReactMarkdown>{editedDescription}</ReactMarkdown>
+            <ReactMarkdown>{description}</ReactMarkdown>
           </div>
         )}
         <p className="font-bold">Detail</p>
