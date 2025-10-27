@@ -14,12 +14,21 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select.tsx";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { X, CalendarClock } from "lucide-react";
 import { UserCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import ReactMarkdown from "react-markdown";
 import type { Task } from "@/types/task.types.ts";
 import Status from "@/components/tasks/Status.tsx";
 import Label from "@/components/tasks/Label.tsx";
+import { users } from "@/mocks/users.ts";
 
 export default function DetailCard({
   setOpenedTaskId,
@@ -29,10 +38,12 @@ export default function DetailCard({
   task: Task;
 }) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isSearchingAssignee, setIsSearchingAssignee] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState(task.description);
   const [jobStatus, setJobStatus] = useState<typeof task.status>(task.status);
+  const [assignee, setAssignee] = useState<string | null>(task.assignee);
 
   const dateFormatter = new Intl.DateTimeFormat(navigator.language, {
     month: "short",
@@ -135,10 +146,42 @@ export default function DetailCard({
         <p className="font-bold">Detail</p>
         <div className="flex">
           <p className="font-semibold w-1/3">Assignee</p>
-          <div className="flex gap-2.5">
-            <UserCircleIcon className="size-6" />
-            <p>{task.assignee ?? "Unassigned"}</p>
-          </div>
+          {isSearchingAssignee ? (
+            <Command>
+              <CommandInput
+                placeholder="Search assignee..."
+                autoFocus
+                onBlur={() => setIsSearchingAssignee(false)}
+              />
+              <CommandList>
+                <CommandEmpty>No users found.</CommandEmpty>
+                <CommandGroup>
+                  {users.map((user) => (
+                    <CommandItem
+                      key={user.name}
+                      onPointerDown={(e) => {
+                        // handle selection on pointer down so it runs before the
+                        // input blur event (which would unmount the list)
+                        e.preventDefault();
+                        setIsSearchingAssignee(false);
+                        setAssignee(user.name);
+                      }}
+                    >
+                      {user.name}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          ) : (
+            <div
+              className="flex gap-2.5"
+              onClick={() => setIsSearchingAssignee(true)}
+            >
+              <UserCircleIcon className="size-6" />
+              <p>{assignee ?? "Unassigned"}</p>
+            </div>
+          )}
         </div>
         <div className="flex">
           <p className="font-semibold w-1/3">Labels</p>
