@@ -118,7 +118,7 @@ export default function DetailCard({
   // // e.g. "2025年9月22日 星期一"
 
   return (
-    <Card className="w-md">
+    <Card className="w-full">
       <CardHeader>
         <div className="flex justify-between">
           <p className="text-sm text-muted-foreground">#{task.id}</p>

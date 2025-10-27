@@ -16,7 +16,7 @@ function App() {
       <openTaskDetailContext.Provider value={{ openedTaskId, setOpenedTaskId }}>
         <div className="flex justify-center gap-4">
           <div
-            className={`sm:max-w-4xl justify-self-center max-w-full transition-all duration-500 ${openedTaskId ? "" : ""}`}
+            className={`sm:max-w-4xl justify-self-center max-w-full transition-all duration-500 ${openedTaskId ? "hidden sm:block" : ""}`}
           >
             <TaskTable
               tasks={currentTasks}
@@ -37,7 +37,7 @@ function App() {
             />
           </div>
           <div
-            className={`${openedTaskId ? "w-md" : "w-0"} transition-all duration-500 `}
+            className={`${openedTaskId ? "w-full sm:w-md" : "w-0"} transition-all duration-500 `}
           >
             {openedTaskId && (
               <DetailCard
