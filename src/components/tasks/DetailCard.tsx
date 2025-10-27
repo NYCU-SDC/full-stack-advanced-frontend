@@ -28,6 +28,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { Calendar } from "@/components/ui/calendar";
 import { X, CalendarClock } from "lucide-react";
 import { UserCircleIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import ReactMarkdown from "react-markdown";
@@ -44,13 +45,17 @@ export default function DetailCard({
   task: Task;
 }) {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isSearchingAssignee, setIsSearchingAssignee] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [description, setDescription] = useState(task.description);
   const [editedDescription, setEditedDescription] = useState(task.description);
   const [jobStatus, setJobStatus] = useState<typeof task.status>(task.status);
   const [assignee, setAssignee] = useState<string | null>(task.assignee);
+  const [isSearchingAssignee, setIsSearchingAssignee] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(
+    task.dueDate ? new Date(task.dueDate) : undefined
+  );
+  const [isSelectingDate, setIsSelectingDate] = useState(false);
 
   const getDescriptionFromLocalStorage = useCallback(() => {
     return localStorage.getItem(`task-${task.id}-description`);
@@ -139,11 +144,24 @@ export default function DetailCard({
           </div>
         )}
 
-        <div className="flex items-center gap-2 text-sm mb-3">
+        <div
+          className="flex items-center gap-2 text-sm mb-3 cursor-pointer"
+          onClick={() => setIsSelectingDate((prev) => !prev)}
+        >
           <CalendarClock size={16} />
-          <p>{dateFormatter.format(new Date(task.dueDate ?? ""))}</p>
+          <p>{dateFormatter.format(date)}</p>
         </div>
-        {/* <div> */}
+        {isSelectingDate && (
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={(d: Date | undefined) => {
+              setDate(d);
+              setIsSelectingDate(false);
+            }}
+            className="rounded-md border shadow-sm"
+          />
+        )}
         <Select
           value={jobStatus}
           onValueChange={(val: string) =>
@@ -168,7 +186,6 @@ export default function DetailCard({
             </SelectItem>
           </SelectContent>
         </Select>
-        {/* </div> */}
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
