@@ -36,6 +36,7 @@ import type { Task } from "@/types/task.types.ts";
 import Status from "@/components/tasks/Status.tsx";
 import Label from "@/components/tasks/Label.tsx";
 import { users } from "@/mocks/users.ts";
+import { updateTask } from "@/requests/updateTask";
 
 export default function DetailCard({
   setOpenedTaskId,
@@ -108,14 +109,10 @@ export default function DetailCard({
     day: "numeric",
     year: "numeric",
   });
-  // e.g. "Monday, September 22, 2025"
 
-  // const twFormatter = new Intl.DateTimeFormat("zh-TW", {
-  //   month: "short",
-  //   day: "numeric",
-  //   year: "numeric",
-  // });
-  // // e.g. "2025年9月22日 星期一"
+  const handleUpdateTask = async (task: Task) => {
+    await updateTask(task.id, task);
+  };
 
   return (
     <Card className="w-full">
@@ -132,7 +129,14 @@ export default function DetailCard({
         {isEditingTitle ? (
           <div className="space-y-2">
             <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-            <Button onClick={() => setIsEditingTitle(false)}>Save</Button>
+            <Button
+              onClick={async () => {
+                await handleUpdateTask({ ...task, title });
+                setIsEditingTitle(false);
+              }}
+            >
+              Save
+            </Button>
           </div>
         ) : (
           <div className="flex gap-2">
@@ -155,18 +159,26 @@ export default function DetailCard({
           <Calendar
             mode="single"
             selected={date}
-            onSelect={(d: Date | undefined) => {
+            onSelect={async (d: Date | undefined) => {
               setDate(d);
               setIsSelectingDate(false);
+              await handleUpdateTask({
+                ...task,
+                dueDate: d ? d.toISOString() : null,
+              });
             }}
             className="rounded-md border shadow-sm"
           />
         )}
         <Select
           value={jobStatus}
-          onValueChange={(val: string) =>
-            setJobStatus(val as typeof task.status)
-          }
+          onValueChange={async (val: string) => {
+            setJobStatus(val as typeof task.status);
+            await handleUpdateTask({
+              ...task,
+              status: val as typeof task.status,
+            });
+          }}
         >
           <SelectTrigger>
             <Status status={jobStatus} />
@@ -207,9 +219,14 @@ export default function DetailCard({
               }}
             />
             <Button
-              onClick={() => {
+              onClick={async () => {
                 setDescription(editedDescription);
                 setIsEditingDescription(false);
+                await handleUpdateTask({
+                  ...task,
+                  description: editedDescription,
+                });
+                localStorage.removeItem(`task-${task.id}-description`);
               }}
             >
               Save
@@ -236,12 +253,16 @@ export default function DetailCard({
                   {users.map((user) => (
                     <CommandItem
                       key={user.name}
-                      onPointerDown={(e) => {
+                      onPointerDown={async (e) => {
                         // handle selection on pointer down so it runs before the
                         // input blur event (which would unmount the list)
                         e.preventDefault();
                         setIsSearchingAssignee(false);
                         setAssignee(user.name);
+                        await handleUpdateTask({
+                          ...task,
+                          assignee: user.name,
+                        });
                       }}
                     >
                       {user.name}
