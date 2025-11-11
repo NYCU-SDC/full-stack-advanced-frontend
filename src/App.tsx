@@ -1,14 +1,24 @@
 import Header from "@/components/Header";
 import TaskTable from "@/components/tasks/TaskTable.tsx";
-import { tasks } from "@/mocks/tasks.ts";
-import { useState } from "react";
+// import { tasks } from "@/mocks/tasks.ts";
+import { useEffect, useState } from "react";
 import DetailCard from "@/components/tasks/DetailCard.tsx";
 import type { Task } from "@/types/task.types.ts";
 import { openTaskDetailContext } from "@/types/openTaskDetailContext.ts";
+import { getAllTasks } from "./requests/getAllTasks";
 
 function App() {
-  const [currentTasks, setCurrentTasks] = useState(tasks);
+  // const [currentTasks, setCurrentTasks] = useState<Task[]>([]);
   const [openedTaskId, setOpenedTaskId] = useState<number | undefined>();
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllTasks();
+      setTasks(data);
+    };
+    fetchData();
+  }, []);
 
   return (
     <main>
@@ -19,9 +29,9 @@ function App() {
             className={`sm:max-w-4xl justify-self-center max-w-full transition-all duration-500 ${openedTaskId ? "hidden sm:block" : ""}`}
           >
             <TaskTable
-              tasks={currentTasks}
+              tasks={tasks}
               addTask={(title: string) =>
-                setCurrentTasks((prev) => [
+                setTasks((prev) => [
                   ...prev,
                   {
                     id: prev.length + 1,
