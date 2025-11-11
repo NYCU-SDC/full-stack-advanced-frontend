@@ -2,7 +2,7 @@ import type { Task } from "@/types/task.types";
 
 export async function getAllTasks(): Promise<Task[]> {
   const response = await fetch(
-    `${process.env.VITE_BACKEND_BASE_URL}/api/tasks`
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/api/tasks`
   );
 
   if (!response.ok) {

@@ -6,6 +6,7 @@ import DetailCard from "@/components/tasks/DetailCard.tsx";
 import type { Task } from "@/types/task.types.ts";
 import { openTaskDetailContext } from "@/types/openTaskDetailContext.ts";
 import { getAllTasks } from "./requests/getAllTasks";
+import { createTask } from "./requests/createTask";
 
 function App() {
   // const [currentTasks, setCurrentTasks] = useState<Task[]>([]);
@@ -20,6 +21,12 @@ function App() {
     fetchData();
   }, []);
 
+  const handleCreateTask = async (title: string) => {
+    await createTask(title);
+    const data = await getAllTasks();
+    setTasks(data);
+  };
+
   return (
     <main>
       <Header />
@@ -28,23 +35,7 @@ function App() {
           <div
             className={`sm:max-w-4xl justify-self-center max-w-full transition-all duration-500 ${openedTaskId ? "hidden sm:block" : ""}`}
           >
-            <TaskTable
-              tasks={tasks}
-              addTask={(title: string) =>
-                setTasks((prev) => [
-                  ...prev,
-                  {
-                    id: prev.length + 1,
-                    title,
-                    description: "",
-                    labels: [],
-                    status: "INBOX",
-                    dueDate: null,
-                    assignee: null,
-                  },
-                ])
-              }
-            />
+            <TaskTable tasks={tasks} addTask={handleCreateTask} />
           </div>
           <div
             className={`${openedTaskId ? "w-full sm:w-md" : "w-0"} transition-all duration-500 `}
