@@ -1,6 +1,6 @@
 export async function createTask(title: string): Promise<void> {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_BASE_URL}/api/tasks`,
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/api/task`,
     {
       method: "POST",
       headers: {
