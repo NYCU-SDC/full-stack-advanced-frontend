@@ -9,7 +9,10 @@ type AccessTokenPayload = {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cookies, setCookie] = useCookies(["access_token", "refresh_token"]);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "access_token",
+    "refresh_token",
+  ]);
 
   useEffect(() => {
     if (!cookies.access_token) return;
@@ -60,8 +63,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return !!cookies.access_token;
   }, [cookies.access_token]);
 
+  const logout = () => {
+    removeCookie("access_token", { path: "/" });
+    removeCookie("refresh_token", { path: "/" });
+  };
+
   return (
-    <authContext.Provider value={{ isLoggedIn }}>
+    <authContext.Provider value={{ isLoggedIn, logout }}>
       {children}
     </authContext.Provider>
   );
