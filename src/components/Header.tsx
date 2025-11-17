@@ -6,8 +6,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { authContext } from "@/lib/authContext";
+import { useContext } from "react";
 
 export default function Header() {
+  const { isLoggedIn } = useContext(authContext);
+
   const handleLogin = () => {
     window.location.href = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login/google?c=${window.location.origin}`;
   };
@@ -20,10 +24,14 @@ export default function Header() {
           <UserCircleIcon className="w-6 h-6" />
         </DialogTrigger>
         <DialogContent>
-          <DialogTitle>Login</DialogTitle>
-          <Button variant="outline" onClick={handleLogin}>
-            Login
-          </Button>
+          <DialogTitle>{isLoggedIn() ? "Profile" : "Login"}</DialogTitle>
+          {isLoggedIn() ? (
+            <p>You are logged in.</p>
+          ) : (
+            <Button variant="outline" onClick={handleLogin}>
+              Login
+            </Button>
+          )}
         </DialogContent>
       </Dialog>
     </div>

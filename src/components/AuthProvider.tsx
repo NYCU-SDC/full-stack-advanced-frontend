@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { refreshToken } from "@/requests/refreshToken";
+import { authContext } from "@/lib/authContext";
 
 type AccessTokenPayload = {
   exp: number;
@@ -55,5 +56,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  return <>{children}</>;
+  const isLoggedIn = useCallback(() => {
+    return !!cookies.access_token;
+  }, [cookies.access_token]);
+
+  return (
+    <authContext.Provider value={{ isLoggedIn }}>
+      {children}
+    </authContext.Provider>
+  );
 };
