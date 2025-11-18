@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { refreshToken } from "@/requests/refreshToken";
@@ -13,6 +13,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     "access_token",
     "refresh_token",
   ]);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    () => !!cookies.access_token
+  );
 
   useEffect(() => {
     if (!cookies.access_token) return;
@@ -39,29 +42,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => clearTimeout(refreshTimer);
   }, [cookies.access_token, cookies.refresh_token, setCookie]);
 
-  // if there is access token in url, save it to cookie
-  if (window.location.href.includes("access_token=")) {
+  // keep local state in sync when cookies change elsewhere
+  useEffect(() => {
+    setIsLoggedIn(!!cookies.access_token);
+  }, [cookies.access_token]);
+
+  // if there is access token in url, save it to cookie (run on mount)
+  useEffect(() => {
+    if (!window.location.href.includes("access_token=")) return;
+    console.log("Found access_token in URL, saving to cookies.");
     const url = new URL(window.location.href);
     const token = url.searchParams.get("access_token");
+
     if (token) {
       setCookie("access_token", token, { path: "/" });
-      // remove token from url
       url.searchParams.delete("access_token");
       window.history.replaceState({}, document.title, url.toString());
     }
 
-    const refreshToken = url.searchParams.get("refresh_token");
-    if (refreshToken) {
-      setCookie("refresh_token", refreshToken, { path: "/" });
-      // remove refresh token from url
+    const refreshTok = url.searchParams.get("refresh_token");
+    if (refreshTok) {
+      setCookie("refresh_token", refreshTok, { path: "/" });
       url.searchParams.delete("refresh_token");
       window.history.replaceState({}, document.title, url.toString());
     }
-  }
-
-  const isLoggedIn = useCallback(() => {
-    return !!cookies.access_token;
-  }, [cookies.access_token]);
+  }, [setCookie]);
 
   const logout = () => {
     removeCookie("access_token", { path: "/" });

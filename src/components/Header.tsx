@@ -12,6 +12,8 @@ import { useContext } from "react";
 export default function Header() {
   const { isLoggedIn, logout } = useContext(authContext);
 
+  console.log("Header render, isLoggedIn:", isLoggedIn);
+
   const handleLogin = () => {
     window.location.href = `${import.meta.env.VITE_BACKEND_BASE_URL}/api/login/google?c=${window.location.origin}`;
   };
@@ -24,8 +26,8 @@ export default function Header() {
           <UserCircleIcon className="w-6 h-6" />
         </DialogTrigger>
         <DialogContent>
-          <DialogTitle>{isLoggedIn() ? "Profile" : "Login"}</DialogTitle>
-          {isLoggedIn() ? (
+          <DialogTitle>{isLoggedIn ? "Profile" : "Login"}</DialogTitle>
+          {isLoggedIn ? (
             <Button variant="outline" onClick={logout}>
               Logout
             </Button>
