@@ -7,11 +7,13 @@ import type { Task } from "@/types/task.types.ts";
 import { openTaskDetailContext } from "@/types/openTaskDetailContext.ts";
 import { getAllTasks } from "./requests/getAllTasks";
 import { createTask } from "./requests/createTask";
+import { useCookies } from "react-cookie";
 
 function App() {
   // const [currentTasks, setCurrentTasks] = useState<Task[]>([]);
   const [openedTaskId, setOpenedTaskId] = useState<number | undefined>();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [cookies] = useCookies(["access_token"]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +24,12 @@ function App() {
   }, []);
 
   const handleCreateTask = async (title: string) => {
-    await createTask(title);
+    if (!cookies.access_token) {
+      console.error("Login to create tasks.");
+      return;
+    }
+
+    await createTask(title, cookies.access_token);
     const data = await getAllTasks();
     setTasks(data);
   };
