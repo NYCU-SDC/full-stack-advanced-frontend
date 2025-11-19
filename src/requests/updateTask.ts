@@ -1,12 +1,17 @@
 import type { Task } from "@/types/task.types";
 
-export async function updateTask(id: number, task: Task): Promise<void> {
+export async function updateTask(
+  id: number,
+  task: Task,
+  access_token: string
+): Promise<void> {
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_BASE_URL}/api/task/${id}`,
     {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${access_token}`,
       },
       body: JSON.stringify(task),
     }

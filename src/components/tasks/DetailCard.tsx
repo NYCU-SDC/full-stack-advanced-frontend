@@ -37,6 +37,7 @@ import Status from "@/components/tasks/Status.tsx";
 import Label from "@/components/tasks/Label.tsx";
 import { users } from "@/mocks/users.ts";
 import { updateTask } from "@/requests/updateTask";
+import { useCookies } from "react-cookie";
 
 export default function DetailCard({
   setOpenedTaskId,
@@ -57,6 +58,7 @@ export default function DetailCard({
     task.dueDate ? new Date(task.dueDate) : undefined
   );
   const [isSelectingDate, setIsSelectingDate] = useState(false);
+  const [cookies] = useCookies(["access_token"]);
 
   const getDescriptionFromLocalStorage = useCallback(() => {
     return localStorage.getItem(`task-${task.id}-description`);
@@ -111,7 +113,7 @@ export default function DetailCard({
   });
 
   const handleUpdateTask = async (task: Task) => {
-    await updateTask(task.id, task);
+    await updateTask(task.id, task, cookies.access_token);
   };
 
   return (
