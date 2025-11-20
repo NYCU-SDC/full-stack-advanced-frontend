@@ -7,7 +7,7 @@ export async function refreshToken(
   refreshToken: string
 ): Promise<RefreshTokenResponse> {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_BASE_URL}/api/refreshToken/${refreshToken}}`
+    `${import.meta.env.VITE_BACKEND_BASE_URL}/api/refreshToken/${refreshToken}`
   );
 
   if (!response.ok) {
