@@ -30,6 +30,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const getNewToken = async () => {
         try {
           const data = await refreshToken(cookies.refresh_token);
+          if (!data.access_token || !data.refresh_token) {
+            console.log("Invalid tokens received during refresh:", data);
+            throw new Error("Invalid tokens received");
+          }
           setCookie("access_token", data.access_token, { path: "/" });
           setCookie("refresh_token", data.refresh_token, { path: "/" });
         } catch (error) {

@@ -18,7 +18,8 @@
     "save": "儲存",
     "detail": "詳細資料",
     "searchAssigneePlaceholder": "搜尋受派人...",
-    "noUsersFound": "找不到使用者。"
+    "noUsersFound": "找不到使用者。",
+    "unAssigned": "未指派"
   },
   "user": {
     "login": "登入",
