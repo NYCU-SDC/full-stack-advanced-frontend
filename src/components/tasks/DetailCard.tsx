@@ -38,6 +38,7 @@ import Label from "@/components/tasks/Label.tsx";
 import { users } from "@/mocks/users.ts";
 import { updateTask } from "@/requests/updateTask";
 import { useCookies } from "react-cookie";
+import { useTranslation } from "react-i18next";
 
 export default function DetailCard({
   setOpenedTaskId,
@@ -59,6 +60,7 @@ export default function DetailCard({
   );
   const [isSelectingDate, setIsSelectingDate] = useState(false);
   const [cookies] = useCookies(["access_token"]);
+  const { t } = useTranslation();
 
   const getDescriptionFromLocalStorage = useCallback(() => {
     return localStorage.getItem(`task-${task.id}-description`);
@@ -137,7 +139,7 @@ export default function DetailCard({
                 setIsEditingTitle(false);
               }}
             >
-              Save
+              {t("task.save")}
             </Button>
           </div>
         ) : (
@@ -203,7 +205,7 @@ export default function DetailCard({
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
-          <p className="font-bold">Description</p>
+          <p className="font-bold">{t("task.description")}</p>
           <PencilSquareIcon
             className="size-6 flex-shrink-0"
             onClick={() => setIsEditingDescription(true)}
@@ -231,7 +233,7 @@ export default function DetailCard({
                 localStorage.removeItem(`task-${task.id}-description`);
               }}
             >
-              Save
+              {t("task.save")}
             </Button>
           </div>
         ) : (
@@ -239,18 +241,18 @@ export default function DetailCard({
             <ReactMarkdown>{description}</ReactMarkdown>
           </div>
         )}
-        <p className="font-bold">Detail</p>
+        <p className="font-bold">{t("task.detail")}</p>
         <div className="flex">
-          <p className="font-semibold w-1/3">Assignee</p>
+          <p className="font-semibold w-1/3">{t("task.assignee")}</p>
           {isSearchingAssignee ? (
             <Command>
               <CommandInput
-                placeholder="Search assignee..."
+                placeholder={t("task.searchAssigneePlaceholder")}
                 autoFocus
                 onBlur={() => setIsSearchingAssignee(false)}
               />
               <CommandList>
-                <CommandEmpty>No users found.</CommandEmpty>
+                <CommandEmpty>{t("task.noUsersFound")}</CommandEmpty>
                 <CommandGroup>
                   {users.map((user) => (
                     <CommandItem
@@ -279,12 +281,12 @@ export default function DetailCard({
               onClick={() => setIsSearchingAssignee(true)}
             >
               <UserCircleIcon className="size-6" />
-              <p>{assignee ?? "Unassigned"}</p>
+              <p>{assignee ?? t("task.unAssigned")}</p>
             </div>
           )}
         </div>
         <div className="flex">
-          <p className="font-semibold w-1/3">Labels</p>
+          <p className="font-semibold w-1/3">{t("task.labels")}</p>
           <div className="flex gap-2.5">
             {task.labels.map((label) => (
               <Label label={label} />

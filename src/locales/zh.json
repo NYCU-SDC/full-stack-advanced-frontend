@@ -15,7 +15,10 @@
     "assignee": "受派人",
     "create": "建立",
     "createPlaceholder": "需要完成什麼任務？",
-    "save": "儲存"
+    "save": "儲存",
+    "detail": "詳細資料",
+    "searchAssigneePlaceholder": "搜尋受派人...",
+    "noUsersFound": "找不到使用者。"
   },
   "user": {
     "login": "登入",

@@ -29,6 +29,7 @@ export function TableBodyRow({
   onClick?: () => void;
 }) {
   const [dueInDays, setDueInDays] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!task.dueDate) return;
@@ -58,7 +59,7 @@ export function TableBodyRow({
         <Status status={task.status} dot={true} />
       </TableCell>
       <TableCell>{dueInDays ? `in ${dueInDays} days` : "N/A"}</TableCell>
-      <TableCell>{task.assignee ?? "Unassigned"}</TableCell>
+      <TableCell>{task.assignee ?? t("task.unAssigned")}</TableCell>
     </TableRow>
   );
 }

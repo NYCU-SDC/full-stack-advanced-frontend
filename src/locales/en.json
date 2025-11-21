@@ -15,7 +15,11 @@
     "assignee": "Assignee",
     "create": "Create",
     "createPlaceholder": "What needs to be done?",
-    "save": "Save"
+    "save": "Save",
+    "detail": "Detail",
+    "searchAssigneePlaceholder": "Search assignee...",
+    "noUsersFound": "No users found.",
+    "unAssigned": "Unassigned"
   },
   "user": {
     "login": "Login",
