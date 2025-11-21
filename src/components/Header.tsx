@@ -17,6 +17,7 @@ import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ModeToggle } from "./mode-toggle";
 import LangSwitcher from "./LangSwitcher";
 import { useTranslation } from "react-i18next";
+import UserProfile from "@/components/UserProfile";
 
 export default function Header() {
   const { isLoggedIn, logout } = useContext(authContext);
@@ -58,9 +59,12 @@ export default function Header() {
               {isLoggedIn ? t("user.profile") : t("user.login")}
             </DialogTitle>
             {isLoggedIn ? (
-              <Button variant="outline" onClick={logout}>
-                {t("user.logout")}
-              </Button>
+              <>
+                <UserProfile />
+                <Button variant="outline" onClick={logout}>
+                  {t("user.logout")}
+                </Button>
+              </>
             ) : (
               <Button variant="outline" onClick={handleLogin}>
                 {t("user.login")}
