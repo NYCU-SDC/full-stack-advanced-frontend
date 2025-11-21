@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ModeToggle } from "./mode-toggle";
+import LangSwitcher from "./LangSwitcher";
 
 export default function Header() {
   const { isLoggedIn, logout } = useContext(authContext);
@@ -39,6 +40,10 @@ export default function Header() {
             <div className="flex justify-between items-center">
               <p className="text-sm">Theme</p>
               <ModeToggle />
+            </div>
+            <div className="flex justify-between items-center">
+              <p className="text-sm">Language</p>
+              <LangSwitcher />
             </div>
           </PopoverContent>
         </Popover>

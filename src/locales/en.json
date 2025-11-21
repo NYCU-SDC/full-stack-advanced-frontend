@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "label": "Settings",
+    "theme": "Theme",
+    "Language": "Language"
+  },
+  "task": {
+    "tableTitle": "Tasks",
+    "id": "ID",
+    "title": "Title",
+    "description": "Description",
+    "status": "Status",
+    "dueDate": "Due Date",
+    "Assignee": "Assignee"
+  }
+}

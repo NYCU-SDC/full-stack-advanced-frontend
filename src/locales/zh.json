@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "label": "設定",
+    "theme": "主題",
+    "Language": "語言"
+  },
+  "task": {
+    "tableTitle": "任務",
+    "id": "ID",
+    "title": "標題",
+    "description": "內容",
+    "status": "狀態",
+    "dueDate": "截止日期",
+    "Assignee": "受派人"
+  }
+}
