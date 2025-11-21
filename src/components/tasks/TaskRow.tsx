@@ -3,17 +3,20 @@ import { type Task } from "@/types/task.types.ts";
 import Label from "@/components/tasks/Label.tsx";
 import Status from "@/components/tasks/Status.tsx";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function TableHeadRow() {
+  const { t } = useTranslation();
+
   return (
     <TableRow>
-      <TableHead className="hidden sm:table-cell">ID</TableHead>
-      <TableHead className="hidden sm:table-cell">Labels</TableHead>
-      <TableHead>Title</TableHead>
-      <TableHead className="hidden sm:table-cell">Status</TableHead>
+      <TableHead className="hidden sm:table-cell">{t("task.id")}</TableHead>
+      <TableHead className="hidden sm:table-cell">{t("task.labels")}</TableHead>
+      <TableHead>{t("task.title")}</TableHead>
+      <TableHead className="hidden sm:table-cell">{t("task.status")}</TableHead>
       <TableHead className="table-cell sm:hidden"></TableHead>
-      <TableHead>Due</TableHead>
-      <TableHead>Assignee</TableHead>
+      <TableHead>{t("task.dueDate")}</TableHead>
+      <TableHead>{t("task.assignee")}</TableHead>
     </TableRow>
   );
 }

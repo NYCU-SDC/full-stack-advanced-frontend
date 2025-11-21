@@ -16,9 +16,11 @@ import {
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { ModeToggle } from "./mode-toggle";
 import LangSwitcher from "./LangSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const { isLoggedIn, logout } = useContext(authContext);
+  const { t } = useTranslation();
 
   console.log("Header render, isLoggedIn:", isLoggedIn);
 
@@ -35,14 +37,14 @@ export default function Header() {
             <Cog8ToothIcon className="size-6" />
           </PopoverTrigger>
           <PopoverContent className="space-y-2">
-            <p className="text-sm font-bold">Settings</p>
+            <p className="text-sm font-bold">{t("settings.label")}</p>
             <hr />
             <div className="flex justify-between items-center">
-              <p className="text-sm">Theme</p>
+              <p className="text-sm">{t("settings.theme")}</p>
               <ModeToggle />
             </div>
             <div className="flex justify-between items-center">
-              <p className="text-sm">Language</p>
+              <p className="text-sm">{t("settings.language")}</p>
               <LangSwitcher />
             </div>
           </PopoverContent>
@@ -52,14 +54,16 @@ export default function Header() {
             <UserCircleIcon className="size-6" />
           </DialogTrigger>
           <DialogContent>
-            <DialogTitle>{isLoggedIn ? "Profile" : "Login"}</DialogTitle>
+            <DialogTitle>
+              {isLoggedIn ? t("user.profile") : t("user.login")}
+            </DialogTitle>
             {isLoggedIn ? (
               <Button variant="outline" onClick={logout}>
-                Logout
+                {t("user.logout")}
               </Button>
             ) : (
               <Button variant="outline" onClick={handleLogin}>
-                Login
+                {t("user.login")}
               </Button>
             )}
           </DialogContent>

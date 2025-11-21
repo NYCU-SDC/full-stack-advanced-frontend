@@ -11,6 +11,7 @@ import { Plus } from "lucide-react";
 import { useContext, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { openTaskDetailContext } from "@/types/openTaskDetailContext.ts";
+import { useTranslation } from "react-i18next";
 
 export default function TaskTable({
   tasks,
@@ -22,11 +23,12 @@ export default function TaskTable({
   const { openedTaskId, setOpenedTaskId } = useContext(openTaskDetailContext);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <Card>
       <CardHeader className="hidden sm:block">
-        <CardTitle className="text-2xl">Tasks</CardTitle>
+        <CardTitle className="text-2xl">{t("task.tableTitle")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -39,7 +41,7 @@ export default function TaskTable({
                 task={task}
                 onClick={() =>
                   setOpenedTaskId(
-                    openedTaskId === task.id ? undefined : task.id,
+                    openedTaskId === task.id ? undefined : task.id
                   )
                 }
                 key={task.id}
@@ -64,7 +66,7 @@ export default function TaskTable({
               onBlur={() => setIsAddingTask(false)}
               value={newTaskTitle}
               onInput={(e) => setNewTaskTitle(e.currentTarget.value)}
-              placeholder="What needs to be done?"
+              placeholder={t("task.createPlaceholder")}
             />
           ) : (
             <div
@@ -72,7 +74,7 @@ export default function TaskTable({
               className="flex p-1 gap-2 items-center hover:bg-muted/50"
             >
               <Plus />
-              <p>Create</p>
+              <p>{t("task.create")}</p>
             </div>
           )}
         </form>

@@ -2,15 +2,24 @@
   "settings": {
     "label": "Settings",
     "theme": "Theme",
-    "Language": "Language"
+    "language": "Language"
   },
   "task": {
     "tableTitle": "Tasks",
     "id": "ID",
     "title": "Title",
     "description": "Description",
+    "labels": "Labels",
     "status": "Status",
     "dueDate": "Due Date",
-    "Assignee": "Assignee"
+    "assignee": "Assignee",
+    "create": "Create",
+    "createPlaceholder": "What needs to be done?",
+    "save": "Save"
+  },
+  "user": {
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile"
   }
 }
